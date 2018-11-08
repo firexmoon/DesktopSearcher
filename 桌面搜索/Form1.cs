@@ -34,6 +34,9 @@ namespace 桌面搜索
             listBox1.Items.Clear();
             label1.Text = "";
             textBox1.Text = "";
+            toolStripStatusLabel1.Text = "";
+            toolStripStatusLabel2.Text = "";
+            toolStripStatusLabel3.Text = "";
             pStrQueue = StrQueue.Count-1;
 
             this.TopMost = true;
