@@ -37,7 +37,7 @@ namespace 桌面搜索.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("*.*")]
+        [global::System.Configuration.DefaultSettingValueAttribute("*.doc *.docx *.xls *.xlsx *.ppt *.pptx *.txt *.pdf")]
         public string ExtNameFilter {
             get {
                 return ((string)(this["ExtNameFilter"]));

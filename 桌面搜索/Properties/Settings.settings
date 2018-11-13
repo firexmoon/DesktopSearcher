@@ -6,7 +6,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="ExtNameFilter" Type="System.String" Scope="User">
-      <Value Profile="(Default)">*.*</Value>
+      <Value Profile="(Default)">*.doc *.docx *.xls *.xlsx *.ppt *.pptx *.txt *.pdf</Value>
     </Setting>
   </Settings>
 </SettingsFile>

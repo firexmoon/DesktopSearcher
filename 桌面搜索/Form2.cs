@@ -12,6 +12,8 @@ namespace 桌面搜索
 {
     public partial class Form2 : Form
     {
+        Boolean bAutoRunState = false;
+
         public Form2()
         {
             InitializeComponent();
@@ -76,32 +78,44 @@ namespace 桌面搜索
                 Form3.InitSearch();
             }
 
-            RegistryKey hklm = Registry.LocalMachine;
-            RegistryKey run = hklm.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run");
+            if (bAutoRunState != checkBox1.Checked)
+            {
+                System.Security.Principal.WindowsIdentity identity = System.Security.Principal.WindowsIdentity.GetCurrent();
+                System.Security.Principal.WindowsPrincipal principal = new System.Security.Principal.WindowsPrincipal(identity);
+                if (principal.IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator))
+                {
+                    RegistryKey hklm = Registry.LocalMachine;
+                    RegistryKey run = hklm.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run");
 
-            if (checkBox1.Checked == true)
-            {
-                try
-                {
-                    run.SetValue("桌面快捷搜索", Application.ExecutablePath);
+                    if (checkBox1.Checked == true)
+                    {
+                        try
+                        {
+                            run.SetValue("桌面快捷搜索", Application.ExecutablePath);
+                        }
+                        catch (Exception my)
+                        {
+                            MessageBox.Show(my.Message.ToString(), "提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                    else
+                    {
+                        try
+                        {
+                            run.DeleteValue("桌面快捷搜索", false);
+                        }
+                        catch (Exception my)
+                        {
+                            MessageBox.Show(my.Message.ToString(), "提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                    hklm.Close();
                 }
-                catch (Exception my)
+                else
                 {
-                    MessageBox.Show(my.Message.ToString(), "提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("无法设置开机启动选项，请以管理员权限重新运行本程序。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-            else
-            {
-                try
-                {
-                    run.DeleteValue("桌面快捷搜索", false);
-                }
-                catch (Exception my)
-                {
-                    MessageBox.Show(my.Message.ToString(), "提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            hklm.Close();
 
             this.Close();
         }
@@ -125,9 +139,9 @@ namespace 桌面搜索
             textBox1.Text = Filter;
 
             RegistryKey hklm = Registry.LocalMachine;
-            RegistryKey run = hklm.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run");
+            RegistryKey key_run = hklm.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run");
 
-            str = (string)run.GetValue("桌面快捷搜索");
+            str = (string)key_run.GetValue("桌面快捷搜索");
             if (str != null)
             {
                 if (str.ToLower() == Application.ExecutablePath.ToLower())
@@ -145,6 +159,7 @@ namespace 桌面搜索
             }
 
             hklm.Close();
+            bAutoRunState = checkBox1.Checked;
         }
 
         private void listBox1_MouseDown(object sender, MouseEventArgs e)
