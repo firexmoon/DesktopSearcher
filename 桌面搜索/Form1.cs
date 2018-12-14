@@ -410,7 +410,7 @@ namespace 桌面搜索
             FileInfo fi = new FileInfo(filepathname);
 
             toolStripStatusLabel1.Text = fi.Name;
-            if (fi.Attributes != FileAttributes.Directory)
+            if ((fi.Attributes & FileAttributes.Directory) != FileAttributes.Directory)
             {
                 if (fi.Length < 1024)
                     toolStripStatusLabel2.Text = fi.Length.ToString() + "B";
